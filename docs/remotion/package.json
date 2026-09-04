@@ -1,0 +1,17 @@
+{
+  "name": "bb-plugin-evals-visuals",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "render": "remotion render src/index.tsx",
+    "render:all": "npm run render -- EvalRatchetArchitecture ../media/eval-ratchet-architecture.mp4 --codec h264 && npm run render -- EvalRatchetArchitecture ../media/eval-ratchet-architecture.gif --codec gif && npm run render -- AgentMemoryArchitecture ../media/agent-memory-architecture.mp4 --codec h264 && npm run render -- AgentMemoryArchitecture ../media/agent-memory-architecture.gif --codec gif"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.520",
+    "@remotion/gif": "4.0.520",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "remotion": "4.0.520"
+  }
+}

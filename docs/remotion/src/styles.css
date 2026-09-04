@@ -1,0 +1,55 @@
+* { box-sizing: border-box; }
+
+.canvas {
+  background: #090d18;
+  color: #f5f7fb;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  padding: 54px 62px 48px;
+  overflow: hidden;
+}
+
+.glow { position: absolute; width: 480px; height: 480px; border-radius: 50%; filter: blur(100px); opacity: .12; }
+.glowOne { background: #58d8ff; top: -280px; left: 40px; }
+.glowTwo { background: #aa8cff; right: -220px; bottom: -280px; }
+.glowThree { background: #55e6a5; right: -180px; bottom: -320px; }
+
+.header { position: relative; z-index: 2; max-width: 970px; }
+.eyebrow { color: #58d8ff; font: 600 15px/1 "DejaVu Sans Mono", monospace; letter-spacing: .16em; }
+h1 { font-size: 48px; line-height: 1.03; letter-spacing: -.045em; margin: 12px 0 8px; }
+.header p { color: #a7b0c2; font-size: 21px; line-height: 1.35; margin: 0; }
+
+.pipeline, .memoryRail { display: grid; grid-template-columns: 1fr 58px 1fr 58px 1fr; align-items: center; margin-top: 34px; position: relative; z-index: 2; }
+.card { background: linear-gradient(145deg, #17223a, #101727); border: 1px solid; border-radius: 18px; height: 205px; padding: 22px; }
+.cardTop { display: flex; justify-content: space-between; align-items: center; }
+.icon { width: 39px; height: 39px; display: grid; place-items: center; border-radius: 11px; font-size: 21px; }
+.tag { font: 600 10px/1 "DejaVu Sans Mono", monospace; letter-spacing: .08em; }
+.card h2 { font-size: 24px; letter-spacing: -.025em; margin: 23px 0 8px; }
+.card p { color: #a7b0c2; font-size: 15px; line-height: 1.43; margin: 0; }
+
+.arrow { display: flex; align-items: center; padding: 0 9px; transform-origin: left center; }
+.arrowLine { height: 2px; flex: 1; transform-origin: left center; }
+.arrowHead { width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 8px solid; }
+
+.lowerFlow { display: grid; grid-template-columns: 1fr 50px 1.1fr 50px 1fr; align-items: center; margin-top: 22px; }
+.failure, .proposal, .gate { min-height: 83px; border: 1px solid; background: #11182a; border-radius: 14px; padding: 14px 18px; display: flex; flex-direction: column; gap: 4px; }
+.lowerFlow span, .memoryBase span, .humanBridge span { font: 600 10px/1.2 "DejaVu Sans Mono", monospace; letter-spacing: .08em; }
+.lowerFlow strong, .memoryBase strong, .humanBridge strong { font-size: 15px; }
+.lowerFlow small, .memoryBase small { color: #a7b0c2; font-size: 12px; }
+.loop { display: flex; justify-content: center; align-items: center; gap: 13px; color: #cdd5e2; font-size: 14px; margin-top: 18px; }
+.loopArrow { color: #55e6a5; }
+
+.memoryBase { display: grid; grid-template-columns: 1.12fr .88fr; gap: 22px; margin-top: 22px; }
+.store, .providerGroup { background: #11182a; border: 1px solid #24314d; border-radius: 15px; min-height: 87px; display: flex; align-items: center; padding: 15px 19px; }
+.store { gap: 16px; }
+.database { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: #58d8ff20; color: #58d8ff; font-size: 26px; }
+.store div:last-child { display: flex; flex-direction: column; gap: 5px; }
+.store span, .providerGroup > span { color: #58d8ff; }
+.providerGroup { flex-direction: column; align-items: flex-start; gap: 12px; }
+.providerPills { display: flex; gap: 8px; }
+.providerPills b { background: #1b2740; border: 1px solid #2c3a5a; border-radius: 999px; padding: 7px 12px; font-size: 12px; }
+.humanBridge { display: grid; grid-template-columns: 1fr 180px 1fr; align-items: center; border: 1px solid #ffc86b66; border-radius: 14px; padding: 13px 20px; margin-top: 18px; background: linear-gradient(90deg, #ffc86b0d, #58d8ff0d); }
+.humanBridge > div:not(.bridgeArrow) { display: flex; flex-direction: column; gap: 5px; }
+.bridgeArrow { color: #ffc86b; text-align: center; font: 600 12px/1 "DejaVu Sans Mono", monospace; }
+
+.footer { position: absolute; bottom: 24px; left: 62px; display: flex; align-items: center; gap: 10px; color: #a7b0c2; font-size: 13px; }
+.pulse { width: 7px; height: 7px; border-radius: 50%; box-shadow: 0 0 14px currentColor; }

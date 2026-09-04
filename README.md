@@ -5,7 +5,28 @@ sealed-fixture ledger that measures whether context changes (an AGENTS.md
 edit, a new skill, a tweaked definition of done) actually improve agent
 output, and files the resulting proposals as tasks instead of applying them.
 
-## Two invariants
+## Architecture
+
+![The eval ratchet architecture](docs/media/eval-ratchet-architecture.gif)
+
+*Higher-quality [MP4 version](docs/media/eval-ratchet-architecture.mp4).*
+
+The ratchet is a loop with a hard human boundary in it:
+
+1. **Sealed fixtures.** A fixture set is a directory of scenarios frozen by a
+   hash manifest of its contents. Sealing is deliberate and explicit.
+2. **Scored runs.** A run measures exactly one context version against one
+   sealed fixture set, in two layers: deterministic checks that either pass or
+   fail on their own, and judge scoring by a model.
+3. **Trend evidence.** Pass rates across runs are what makes a context change
+   defensible. "The agent seems better" is not evidence; a movement in pass
+   rate against fixtures that did not move is.
+4. **Human-gated proposals.** When a specific scenario fails, the failure is
+   traced into a proposal carrying the amendment, the evidence, and a
+   prediction. The proposal is filed as a task. A human adopts or declines it,
+   and a human makes the edit.
+
+### Two invariants
 
 - **No apply operation exists.** The plugin can propose an amendment and read
   state; there is no code path anywhere in `server.ts` that writes to a target
@@ -14,6 +35,48 @@ output, and files the resulting proposals as tasks instead of applying them.
   their contents. If a sealed fixture set has drifted since it was sealed,
   scoring refuses outright rather than silently optimizing against a moving
   target.
+
+## The agent memory layer
+
+![The agent memory layer architecture](docs/media/agent-memory-architecture.gif)
+
+*Higher-quality [MP4 version](docs/media/agent-memory-architecture.mp4).*
+
+Memory is the other half of the context problem, and the two halves answer
+different questions. Memory decides what an agent can recall. The ratchet
+decides whether that recall actually changed behavior for the better.
+
+The memory layer itself is bb's built-in `memory` plugin, not part of this
+repository. It matters here because it is one of the context sources the
+ratchet measures, and because both layers are built on the same rule: reveal
+only what is needed, and record why. A compact index of summaries is injected into agent context
+every turn. Search narrows to candidates. The full record, with its details,
+provenance, write reason, and version history, loads only when an agent asks
+for it. Writes are version-checked and deletion is soft, so a memory's history
+survives being wrong.
+
+The bridge between the two layers is the human gate. Evidence from a scored
+run becomes an adopted or declined proposal, and only verified learning is
+worth making durable.
+
+## Demos
+
+The evals flow, from sealed fixtures through drift refusal to a filed
+proposal:
+
+![Terminal recording of the evals flow](docs/media/evals-flow-demo.gif)
+
+Note the fourth command. `x-demo` has drifted since it was sealed, and the
+plugin says so instead of scoring against it.
+
+The memory layer's progressive disclosure, from the compact index to a full
+record with provenance:
+
+![Terminal recording of the memory layer](docs/media/memory-flow-demo.gif)
+
+Both recordings are generated from checked-in
+[VHS](https://github.com/charmbracelet/vhs) tapes in `docs/demos/`, against
+real local state. See [docs/README.md](docs/README.md) to regenerate them.
 
 ## Install
 
