@@ -5,6 +5,30 @@ sealed-fixture ledger that measures whether context changes (an AGENTS.md
 edit, a new skill, a tweaked definition of done) actually improve agent
 output, and files the resulting proposals as tasks instead of applying them.
 
+## How it works
+
+```mermaid
+flowchart LR
+    A["Context change<br/>(AGENTS.md edit, new skill,<br/>definition of done)"] --> S["bb evals start<br/>open a run"]
+    F[("Sealed fixture set<br/>hash manifest")] -->|"drift check"| S
+    F -.->|"drift detected"| X["Scoring refused<br/>(no moving targets)"]
+    S --> SC["bb evals score<br/>deterministic + judge layers"]
+    SC --> T["bb evals trend<br/>pass-rate ledger"]
+    T -->|"failure traced"| P["bb evals propose<br/>amendment + evidence"]
+    P --> TA["Filed as a task<br/>(bb evals file)"]
+    TA --> H{"Human review"}
+    H -->|"adopt: human edits the file"| A
+    H -->|"decline"| N["Closed -<br/>nothing applied"]
+
+    classDef core fill:#005032,stroke:#0D1016,color:#FAFAF9
+    classDef store fill:#0D1016,stroke:#005032,color:#FAFAF9
+    classDef guard fill:#F5C518,stroke:#0D1016,color:#0D1016
+    class S,SC,T,P,TA core
+    class F,DB store
+    class X,H,N guard
+```
+
+
 ## Two invariants
 
 - **No apply operation exists.** The plugin can propose an amendment and read
