@@ -29,6 +29,37 @@ flowchart LR
 ```
 
 
+## How they work together
+
+kb-graph is the memory layer; evals is the measurement layer. The agent retrieves context through `kb_search`; evals scores runs against sealed fixtures and files improvement proposals as tasks; a human adopts by editing AGENTS.md, a skill, or a KB doc; the next sweep re-indexes the change and the next run measures whether output improved.
+
+```mermaid
+flowchart TB
+    subgraph MEM["MEMORY LAYER - bb-plugin-kb-graph"]
+        direction LR
+        SRC["Docs vaults, projects,<br/>tasks, threads, repos"] --> SWP["Sweep"]
+        SWP --> GR[("SQLite: FTS5 chunks,<br/>nodes, gold edges")]
+    end
+    subgraph EVAL["MEASUREMENT LAYER - bb-plugin-evals"]
+        direction LR
+        ST["Run opened<br/>(fixtures drift-checked)"] --> SC["Deterministic +<br/>judge scoring"]
+        SC --> TR["Trend ledger"] --> PP["Proposals<br/>filed as tasks"]
+    end
+    GR -->|"kb_search: retrieval<br/>across every surface"| AG["Agent work"]
+    AG --> ST
+    PP -->|"adopt: a human edits<br/>AGENTS.md, a skill, a KB doc"| DOC["Context change"]
+    DOC -->|"next sweep re-indexes"| SWP
+    DOC -->|"next run measures<br/>whether output improved"| ST
+
+    classDef core fill:#005032,stroke:#0D1016,color:#FAFAF9
+    classDef store fill:#0D1016,stroke:#005032,color:#FAFAF9
+    classDef guard fill:#F5C518,stroke:#0D1016,color:#0D1016
+    class SRC,SWP,ST,SC,TR,PP,AG core
+    class GR store
+    class DOC guard
+```
+
+
 ## Two invariants
 
 - **No apply operation exists.** The plugin can propose an amendment and read
